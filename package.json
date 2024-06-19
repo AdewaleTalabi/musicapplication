@@ -1,6 +1,9 @@
 {
   "name": "musicapp",
   "version": "0.1.0",
+  "publishConfig" : {
+    "registry": "http://100.28.136.175:8081/repository/MusicApplication/"
+  },
   "private": false,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
