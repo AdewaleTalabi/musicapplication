@@ -2,3 +2,4 @@ email=adewaletalabi@hotmail.com
 #always-auth=true
 _auth=YWRtaW46cGFzc3cwcmQ=
 allowRepublish=true
+legacy-peer-deps=true
