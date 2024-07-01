@@ -1,5 +1,5 @@
 email=admin@example.org
-#always-auth=true
+always-auth=true
 _auth=YWRtaW46U3RheXRocmVlMzMhPw==
 allowRepublish=true
 legacy-peer-deps=true
