@@ -2,7 +2,7 @@
   "name": "musicapp",
   "version": "0.1.0",
   "publishConfig" : {
-    "registry": "http://54.86.148.188:8081/repository/npm-repo/"
+    "registry": "http://54.86.148.188:8081/repository/npm-private/"
   },
   "private": false,
   "dependencies": {
