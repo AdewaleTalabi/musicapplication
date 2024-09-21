@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 echo 'The following "npm" command runs Node.js application'
 
