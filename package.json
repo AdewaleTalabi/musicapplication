@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "stop": "lsof -i :3000 | grep LISTEN | awk '{print $2}' | xargs kill"
+    "stop": "pkill -SIGINT -f server.ts"
   },
   "eslintConfig": {
     "extends": [
