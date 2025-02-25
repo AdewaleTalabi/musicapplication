@@ -74,4 +74,9 @@ After this process, my Jenkins server was successfully set up and running on por
 
 # 3. Sonarqube Server
 
+**I used the following commands to install the Sonarqube application:**
+
+
+
+
 I found the simplest way for me to install Sonarqube was from a Docker image with the help of this [tutorial](https://www.youtube.com/watch?v=WsnH69zQ1ak&t=976s)
