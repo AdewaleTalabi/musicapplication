@@ -16,3 +16,9 @@ Full video expalnation of the project can be found - [here](https://youtu.be/7RN
 * Sonarqube
 * React NodeJs
 * Docker
+
+# 1. EC2 Instances
+
+For this project, I used three Ubuntu virtual machines, each one to host the applications I would be using within my CI/CD pipeline. 
+
+/assets/images/imamgem3.jpeg
