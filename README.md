@@ -21,6 +21,8 @@ Full video expalnation of the project can be found - [here](https://youtu.be/7RN
 
 For this project, I used three Ubuntu virtual machines, each one to host the applications I would be using within my CI/CD pipeline. 
 
+All the EC2 instances use Ubuntu 20.04 Image
+
 
 
 ![](/Assets/Images/Imagem3.jpg)
@@ -39,3 +41,27 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins
 sudo apt update
 sudo apt install jenkins -y
 ```
+**Booting**
+
+Upon initial installation I was encountering issues when closing the VM and opening new sessions, therefore, to ensure that Jenkins was part of the programs that automatically booted with the virtual machine I added the following lines to a file named Jenkins.service.
+
+**Jenkins.service**
+
+```
+[Service]
+Type=notify
+NotifyAccess=main
+ExecStart=/usr/bin/jenkins
+Restart=on-failure
+SuccessExitStatus=143
+```
+
+After setting up this file, I then used the following commands to enable that Jenkins was a part of my server's boot process.
+
+```
+sudo systemctl daemon-reload
+sudo systemctl start jenkins
+sudo systemctl enable Jenkins
+```
+
+
