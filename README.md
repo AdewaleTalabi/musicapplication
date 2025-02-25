@@ -56,7 +56,7 @@ Restart=on-failure
 SuccessExitStatus=143
 ```
 
-After setting up this file, I then used the following commands to enable that Jenkins was a part of my server's boot process.
+After setting up the Jenkins.service file, I then used the following commands to enable that Jenkins was a part of my server's boot process.
 
 ```
 sudo systemctl daemon-reload
@@ -64,4 +64,14 @@ sudo systemctl start jenkins
 sudo systemctl enable Jenkins
 ```
 
+After this process, my Jenkins server was successfully set up and running on port 8080 of my virtual machine.
 
+**Result**
+
+![](/Assets/Images/Imagem5.jpg)
+
+![](/Assets/Images/Imagem6.jpg)
+
+# 3. Sonarqube Server
+
+I found the simplest way for me to install Sonarqube was from a Docker image with the help of this [tutorial](https://www.youtube.com/watch?v=WsnH69zQ1ak&t=976s)
