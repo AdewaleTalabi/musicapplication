@@ -29,7 +29,9 @@ All the EC2 instances use Ubuntu 20.04 Image
 
 # 2. Jenkins Server
 
-This process was straightforward with the wide range of tutorials available to demonstrate how do set Jenkins up on an Ubuntu machine.
+Jenkins enables users to automate parts of software development pertaining to building, testing and deployment.
+
+The installation process was straightforward with the wide range of tutorials available to demonstrate how do set Jenkins up on an Ubuntu machine.
 
 **I used the following commands to install and my Jenkins application:**
 
@@ -73,6 +75,8 @@ After this process, my Jenkins server was successfully set up and running on por
 ![](/Assets/Images/Imagem6.jpg)
 
 # 3. Sonarqube Server
+
+Sonarqube allows for the continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs and code smells.
 
 I found the simplest way for me to install Sonarqube was from a Docker image with the help of this [tutorial](https://www.youtube.com/watch?v=WsnH69zQ1ak&t=976s) 
 
@@ -126,6 +130,8 @@ After running all these commands, I now have a Sonarqube application running on 
 ![](/Assets/Images/Imagem9.jpg)
 
 # 4. Nexus Server
+
+Nexus Repository is a software repository manager
 
 **I used the following commands to install the Nexus application:**
 
