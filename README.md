@@ -29,7 +29,9 @@ All the EC2 instances use Ubuntu 20.04 Image
 
 # 2. Jenkins Server
 
-This process was straightforward with the wide range of tutorials available to demonstrate how do set Jenkins up on an Ubuntu machine.
+Jenkins enables users to automate parts of software development pertaining to building, testing and deployment.
+
+The installation process was straightforward with the wide range of tutorials available to demonstrate how do set Jenkins up on an Ubuntu machine.
 
 **I used the following commands to install and my Jenkins application:**
 
@@ -73,6 +75,8 @@ After this process, my Jenkins server was successfully set up and running on por
 ![](/Assets/Images/Imagem6.jpg)
 
 # 3. Sonarqube Server
+
+Sonarqube allows for the continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs and code smells.
 
 I found the simplest way for me to install Sonarqube was from a Docker image with the help of this [tutorial](https://www.youtube.com/watch?v=WsnH69zQ1ak&t=976s) 
 
@@ -127,6 +131,8 @@ After running all these commands, I now have a Sonarqube application running on 
 
 # 4. Nexus Server
 
+Nexus Repository is a software repository manager
+
 **I used the following commands to install the Nexus application:**
 
 ```
@@ -141,6 +147,26 @@ sudo docker run -d -p 8081:8081 --name nexus sonatype/nexus3
 ![](/Assets/Images/Imagem10.jpg)
 
 ![](/Assets/Images/Imagem11.jpg)
+
+# Security Group Rules
+
+**Jenkins**
+
+•        SSH 22 – To access virtual machine from my local machine
+•        Custom TCP 3000 – This is where the dockerised React app runs upon build
+•        Custom TCP 8080 – To enable access to the Jenkins application from the web server 
+
+**Sonarqube**
+
+•        SSH 22 – To access virtual machine from my local machine
+•        Custom TCP 80 – To enable access to the Sonarqube application from the web server
+
+
+**Nexus**
+
+•	SSH 22 – To access virtual machine from my local machine
+•	Custom TCP 8081 – To enable access to Nexus application from the web server
+
 
 # 4. Building The Pipeline
 
@@ -225,3 +251,82 @@ stage('SonarQube analysis') {
 Sonarqube is now running tests on the musicapplication code that has been pulled from my Github repository
 
 # Stage 5 - Zip Folder
+
+**Purpose:** Create a zip folder with the artifacts from the musicapplication and store for artifact management. 
+
+**Issues With Nexus**
+
+Originally Nexus was meant to be used to handle the artifact management process, however, I struggled to connect the Jenkins and Nexus servers as the ability to create user tokens needed for this process was only available to Sonatype Nexus Repository pro users.
+
+In order to work around this issue, I decided to create a zip file with the musicapplication’s repository files and publish them to an S3 bucket on my AWS account in stage 6.
+
+```
+stage('Zip Folder') {
+            steps {     sh 'cd ${WORKSPACE}'
+                        sh 'ls'
+                        sh "find . -type f -name '*.zip' -exec rm {} \\;" //Remove any previous zip folders from prior builds to prevent doubling of artefact file                    
+                        sh 'ls'
+                        sh 'rm -rf /var/lib/jenkins/musicapp' 
+                        sh 'mkdir /var/lib/jenkins/musicapp'
+                        sh 'cp -r ${WORKSPACE}/* /var/lib/jenkins/musicapp/'
+                        sh 'zip -r musicapp-$BUILD_TIMESTAMP /var/lib/jenkins/musicapp'   
+            }
+        }
+```
+
+# Stage 6 - S3 Bucket Publish
+
+**Purpose:** Upload artifact Zip file created in stage 6 to S3 bucket for artifact management
+
+```
+stage('S3 Bucket Publish') { 
+        steps{
+            s3Upload consoleLogLevel: 'INFO', dontSetBuildResultOnFailure: true, dontWaitForConcurrentBuildCompletion: false, entries: [[bucket: 'mu-sicappbucket148', excludedFile: '', flatten: false, gzipFiles: false, keepForever: false, managedArtifacts: false, noUploadOnFailure: false, se-lectedRegion: 'us-west-1', showDirectlyInBrowser: false, sourceFile: '**/musicapp-$BUILD_TIMESTAMP.zip', storageClass: 'STANDARD', uploadFrom-Slave: false, useServerSideEncryption: false]], pluginFailureResultCon-straint: 'FAILURE', profileName: 'Awodi', userMetadata: []        }
+        }
+```
+
+Result
+
+![](/Assets/Images/Imagem15.jpg)
+
+![](/Assets/Images/Imagem16.jpg)
+
+S3 bucket containing zip folder with the musicapplication build
+
+# Stage 7 - Build Docker Image & Run Docker Image
+
+**Purpose:** Create a docker image using the Dockerfile and run on the port 3000 of the Jenkins server
+
+```
+stage('Build Docker Image & Run Docker Image'){
+        steps{
+            sh 'docker stop $(docker ps -q)'
+            sh "find . -type f -name '*.zip' -exec rm {} \\;"
+            sh "rm -rf node_modules"
+            
+            sh "docker build . -t 'musicappproper:$BUILD_NUMBER'"
+            sh "docker run -d -p 3000:3000 musicappprop-er:$BUILD_NUMBER"    
+            }  
+        }
+```
+**Dockerfile**
+
+```
+FROM node:18-alpine
+WORKDIR /app
+COPY package.json
+RUN npm install
+COPY ..
+EXPOSE 3000
+CMD ["npm","start"]
+```
+
+**Result**
+
+![](/Assets/Images/Imagem17.jpg)
+
+![](/Assets/Images/Imagem18.jpg)
+
+I now have my application running on a docker container on my Jenkins server!
+
+The application can now be automatically updated and checked for security issues 
